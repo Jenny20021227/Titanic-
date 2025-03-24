@@ -38,6 +38,7 @@ We discovered:
 
 Solo travelers had lower survival rates.
 Small families (2–4 members) had better survival rates.
+
 ▶️ Top 5 and Bottom 5 Survival Rate Groups
 By grouping passengers by combinations of Sex, Pclass, and FamilySize, we identified:
 
