@@ -1,0 +1,187 @@
+---
+title: "Titanic"
+output: html_document
+date: "2025-03-24"
+---
+```{r}
+# Load essential libraries
+library(tidyverse)
+library(ggplot2)
+library(randomForest)
+# Set working directory to your project folder
+setwd("~/Desktop/Jenny's R project")
+
+# Check current working directory
+getwd()
+# Load the Titanic datasets
+train <- read.csv("data/train.csv")
+test <- read.csv("data/test.csv")
+submission <- read.csv("data/sample_submission.csv")
+# Check structure and first few rows
+str(train)
+head(train)
+
+str(test)
+head(test)
+
+# Check missing values
+colSums(is.na(train))
+colSums(is.na(test))
+
+```
+```{r}
+ggplot(train, aes(x = Sex, fill = factor(Survived))) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = c("red", "green"), labels = c("Died", "Survived")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Survival Rate by Sex",
+       x = "Sex",
+       y = "Proportion",
+       fill = "Survival") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+```
+```{r}
+ggplot(train, aes(x = factor(Pclass), fill = factor(Survived))) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = c("red", "green"), labels = c("Died", "Survived")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Survival Rate by Passenger Class",
+       x = "Passenger Class",
+       y = "Proportion",
+       fill = "Survival") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+```
+```{r}
+ggplot(train %>% filter(!is.na(Age)), aes(x = Age, fill = factor(Survived))) +
+  geom_histogram(position = "identity", bins = 30, alpha = 0.6) +
+  scale_fill_manual(values = c("red", "green"), labels = c("Died", "Survived")) +
+  labs(title = "Age Distribution by Survival",
+       x = "Age",
+       y = "Count",
+       fill = "Survival") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+```
+```{r}
+train$FamilySize <- train$SibSp + train$Parch + 1
+train$IsAlone <- ifelse(train$FamilySize == 1, 1, 0)
+train$IsAlone <- as.factor(train$IsAlone)
+```
+```{r}
+library(ggplot2)
+
+ggplot(train, aes(x = factor(FamilySize), fill = factor(Survived))) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = c("red", "green"),
+                    labels = c("Died", "Survived")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Survival Rate by Family Size",
+       x = "Family Size (SibSp + Parch + Self)",
+       y = "Proportion",
+       fill = "Survival") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+ggplot(train, aes(x = IsAlone, fill = factor(Survived))) +
+  geom_bar(position = "fill") +
+  scale_x_discrete(labels = c("0" = "Not Alone", "1" = "Alone")) +
+  scale_fill_manual(values = c("red", "green"),
+                    labels = c("Died", "Survived")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Survival Rate by Alone vs Not Alone",
+       x = "Is Alone?",
+       y = "Proportion",
+       fill = "Survival") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+```
+```{r}
+train$FamilySize <- train$SibSp + train$Parch + 1
+library(dplyr)
+
+# Create group based on Sex, Pclass, FamilySize
+train$Group <- paste(train$Sex, train$Pclass, train$FamilySize, sep = "_")
+
+# Summarize survival rate by group
+group_summary <- train %>%
+  group_by(Group) %>%
+  summarise(SurvivalRate = mean(Survived),
+            Count = n()) %>%
+  filter(Count >= 5) %>%  # Optional: remove groups with very few people
+  arrange(desc(SurvivalRate))
+top5 <- group_summary %>% slice_head(n = 5)
+bottom5 <- group_summary %>% slice_tail(n = 5)
+
+# Combine and order for plotting
+top_bottom <- bind_rows(top5, bottom5) %>%
+  mutate(Group = factor(Group, levels = Group))
+library(ggplot2)
+library(scales)
+
+ggplot(top_bottom, aes(x = Group, y = SurvivalRate, fill = SurvivalRate)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_gradient(low = "red", high = "green") +
+  scale_y_continuous(labels = percent) +
+  labs(title = "Top 5 and Bottom 5 Survival Rate Groups",
+       subtitle = "Grouped by Sex, Pclass, and Family Size",
+       x = "Group (Sex_Pclass_FamilySize)",
+       y = "Survival Rate") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5))
+
+```
+```{r}
+library(randomForest)
+# Create FamilySize and IsAlone in both datasets
+train$FamilySize <- train$SibSp + train$Parch + 1
+train$IsAlone <- as.factor(ifelse(train$FamilySize == 1, 1, 0))
+
+test$FamilySize <- test$SibSp + test$Parch + 1
+test$IsAlone <- as.factor(ifelse(test$FamilySize == 1, 1, 0))
+# Convert to factors (train)
+train$Pclass <- as.factor(train$Pclass)
+train$Sex <- as.factor(train$Sex)
+train$Embarked[train$Embarked == ""] <- "S"  # Fill missing
+train$Embarked <- as.factor(train$Embarked)
+
+# Convert to factors (test)
+test$Pclass <- as.factor(test$Pclass)
+test$Sex <- as.factor(test$Sex)
+test$Embarked[is.na(test$Embarked) | test$Embarked == ""] <- "S"
+test$Embarked <- as.factor(test$Embarked)
+# Fill missing Age in train with median
+train$Age[is.na(train$Age)] <- median(train$Age, na.rm = TRUE)
+
+# Fill missing Age and Fare in test with medians
+test$Age[is.na(test$Age)] <- median(test$Age, na.rm = TRUE)
+test$Fare[is.na(test$Fare)] <- median(test$Fare, na.rm = TRUE)
+# Set seed for reproducibility
+set.seed(42)
+
+# Train the model
+rf_model <- randomForest(
+  factor(Survived) ~ Pclass + Sex + Age + Fare + Embarked + FamilySize + IsAlone,
+  data = train,
+  ntree = 500,
+  importance = TRUE
+)
+# Match factor levels
+test$Pclass <- factor(test$Pclass, levels = levels(train$Pclass))
+test$Sex <- factor(test$Sex, levels = levels(train$Sex))
+test$Embarked <- factor(test$Embarked, levels = levels(train$Embarked))
+test$IsAlone <- factor(test$IsAlone, levels = levels(train$IsAlone))
+
+# Predict
+test$Survived <- predict(rf_model, newdata = test)
+```
+```{r}
+submission_final <- test %>% select(PassengerId, Survived)
+write.csv(submission_final, "submission.csv", row.names = FALSE)
+```
