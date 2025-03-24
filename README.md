@@ -123,6 +123,6 @@ Family	              Small families (2–4) /	Alone or very large group
 
 Fare	            /            High fare	   /     Low fare
 
-Title	            /         Miss/Mrs/Master	 /   Mr, Other
+Title	            /         Miss,Mrs,Master	 /   Mr, Other
 
 These rules were learned through data, not manually coded.
