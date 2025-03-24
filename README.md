@@ -126,3 +126,54 @@ Fare	            /            High fare	   /     Low fare
 Title	            /         Miss,Mrs,Master	 /   Mr, Other
 
 These rules were learned through data, not manually coded.
+
+🧠 What I Learned
+
+Through this project, I gained hands-on experience in:
+
+Real-world data cleaning and feature engineering in R
+
+Visual storytelling with ggplot2
+
+Handling missing values, categorical encoding, and data imbalance
+
+Building interpretable machine learning models with randomForest
+
+Producing end-to-end analysis reports using R Markdown to HTML
+
+🕰 Historical and Social Insights
+
+While this project focused on data science and prediction, the Titanic dataset also offered a striking glimpse into the social structure and inequalities of the early 20th century.
+
+Here are some of the most compelling patterns we observed during analysis:
+
+🕰 Historical and Social Insights
+
+While this project focused on data science and prediction, the Titanic dataset also offered a striking glimpse into the social structure and inequalities of the early 20th century.
+
+Here are some of the most compelling patterns we observed during analysis:
+
+🧑‍🤝‍🧑 Family Matters
+Passengers who traveled with family (FamilySize 2–4) had better survival rates than those who were alone.
+The presence of family may have improved communication and support during evacuation, and perhaps family groups were prioritized together.
+
+
+🏰 Class Disparity
+The survival rate for 1st class passengers was dramatically higher than that of 3rd class passengers.
+Wealth and social status clearly played a role in access to lifeboats and evacuation order.
+Many 3rd class passengers were located in lower decks, making it physically harder to reach lifeboats quickly.
+
+
+🎩 Social Titles Reflecting Status
+Features like "Title" (Mr, Miss, Mrs, Master, etc.) helped capture nuanced social roles.
+Rare titles like "Dr", "Rev", or "Sir" were grouped under “Other” but still reflect the formal social hierarchy of the era.
+The fact that the title Master (young boys) showed relatively high survival is also consistent with the focus on saving children.
+
+
+🚢 Port of Embarkation
+Most passengers boarded at Southampton ("S"), but those from Cherbourg ("C") had higher survival rates.
+This is likely because many wealthier passengers boarded from Cherbourg, reinforcing how socio-economic status impacted survival.
+
+💬 Conclusion
+Through this data, we weren't just predicting outcomes — we were uncovering real human stories shaped by class, gender, age, and access.
+The Titanic dataset serves as both a machine learning playground and a powerful reflection of social dynamics from a century ago.
