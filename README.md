@@ -21,13 +21,16 @@ Using ggplot2, we visualized survival patterns across key variables:
 
 ▶️ Survival Rate by Sex
 Female passengers had significantly higher survival rates than males.
+<img width="691" alt="survival_by_sex" src="https://github.com/user-attachments/assets/2d2df034-69ce-458b-b98f-efd31b59d894" />
 
 ▶️ Survival Rate by Passenger Class
 1st class passengers were far more likely to survive than those in 3rd class.
+<img width="691" alt="survival_by_class" src="https://github.com/user-attachments/assets/7de728e9-537f-4952-b439-41bcbcc665b7" />
 
 ▶️ Age and Fare Distributions
 Younger children (especially under 10) had higher survival rates.
 Passengers who paid higher fares generally had better outcomes, especially in 1st class.
+<img width="691" alt="age_distribution" src="https://github.com/user-attachments/assets/33560d65-d161-4374-8200-683dfdd7402f" />
 
 ▶️ Survival Rate by Family Size & Alone Status
 We engineered:
@@ -38,6 +41,8 @@ We discovered:
 
 Solo travelers had lower survival rates.
 Small families (2–4 members) had better survival rates.
+<img width="691" alt="survival_by_family_size" src="https://github.com/user-attachments/assets/79008296-5e00-47ee-bf7e-038add2d4e7f" />
+<img width="691" alt="survival_by_isalone" src="https://github.com/user-attachments/assets/88b85700-62f5-4ef3-aceb-a7e8eb1c315b" />
 
 ▶️ Top 5 and Bottom 5 Survival Rate Groups
 By grouping passengers by combinations of Sex, Pclass, and FamilySize, we identified:
@@ -45,6 +50,7 @@ By grouping passengers by combinations of Sex, Pclass, and FamilySize, we identi
 Top 5 Groups (e.g., female_1_2) with survival rates near 100%
 Bottom 5 Groups (e.g., male_3_1) with survival rates near 0%
 This highlighted the real-world impact of social status, gender, and family.
+<img width="691" alt="top_bottom_groups" src="https://github.com/user-attachments/assets/5ab4762c-2493-4282-ad0d-6dd854f6206a" />
 
 🤖 Modeling with Random Forest
 
