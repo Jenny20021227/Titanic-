@@ -112,11 +112,17 @@ This passenger likely matched the pattern of male + 3rd class + alone, or lacked
 The model made decisions based on patterns it observed in the training data:
 
 Feature	                 Higher Survival	Lower Survival
+
 Sex	                          Female	          Male
+
 Class(Pclass)	                1st class	    3rd class
+
 Age                 	Young children (<10)	Middle-aged males
+
 Family	              Small families (2–4)	Alone or very large group
+
 Fare	                        High fare	        Low fare
+
 Title	                     Miss/Mrs/Master	    Mr, Other
 
 These rules were learned through data, not manually coded.
