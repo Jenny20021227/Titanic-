@@ -21,11 +21,14 @@ Using ggplot2, we visualized survival patterns across key variables:
 
 ▶️ Survival Rate by Sex
 Female passengers had significantly higher survival rates than males.
+
 ▶️ Survival Rate by Passenger Class
 1st class passengers were far more likely to survive than those in 3rd class.
+
 ▶️ Age and Fare Distributions
 Younger children (especially under 10) had higher survival rates.
 Passengers who paid higher fares generally had better outcomes, especially in 1st class.
+
 ▶️ Survival Rate by Family Size & Alone Status
 We engineered:
 
